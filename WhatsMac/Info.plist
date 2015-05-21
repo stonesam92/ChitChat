@@ -33,6 +33,6 @@
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/stonesam92/WhatsMac/blob/master/update_appcast.xml</string>
+	<string>https://raw.githubusercontent.com/stonesam92/WhatsMac/master/update_appcast.xml</string>
 </dict>
 </plist>
