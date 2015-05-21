@@ -1,6 +1,8 @@
 #WhatsMac
 
 A native Mac wrapper around WhatsApp's web client, [WhatsApp Web](https://web.whatsapp.com).
+  
+  
 ![Screenshot](http://i.imgur.com/riXrTvx.jpg)
 
 > Disclaimer: This is NOT an official WhatsApp Product, it is simply hobby project created by myself
