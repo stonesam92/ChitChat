@@ -1,7 +1,6 @@
 #WhatsMac
 
-A native Mac wrapper around WhatsApp's web client, [WhatsApp Web](https://web.whatsapp.com).
-  
+A Mac app wrapper around WhatsApp's web client, [WhatsApp Web](https://web.whatsapp.com). The latest version is available [here](https://github.com/stonesam92/WhatsMac/releases/latest).
   
 ![WhatsMac Screenshot](http://i.imgur.com/riXrTvx.jpg "WhatsMac Screenshot")
 
@@ -32,6 +31,7 @@ Most features of WhatsApp Web are currently supported, and support for the remai
 
 \*Media uploading **is** supported when dragging the image/video file into the app's window. Uploading using the upload button is currently not supported, since WKWebView provides no easy mechanism for using `<input type="file">` tags.
 
+**Note**: the app is not signed with an Apple developer cert. If you have Gatekeeper enabled, the first time you run it you must right click the app in Finder and select "Open".
 
 ##Note To WhatsApp
 
