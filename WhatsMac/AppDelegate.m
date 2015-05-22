@@ -31,8 +31,16 @@
     
     #if DEBUG
     [config.preferences setValue:@YES forKey:@"developerExtrasEnabled"];
+    #else
+    WKUserScript *noRightClickJS = [[WKUserScript alloc] initWithSource:
+                                    @"document.addEventListener('contextmenu',"
+                                    "function(event) {"
+                                        "event.preventDefault();"
+                                    "});"
+                                                          injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                                       forMainFrameOnly:NO];
+    [contentController addUserScript:noRightClickJS];
     #endif
-    
     return config;
 }
 
