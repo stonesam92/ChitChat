@@ -15,6 +15,7 @@
 		2262F0DE1B0A9BD900186F1D /* inject.js in Resources */ = {isa = PBXBuildFile; fileRef = 2262F0DD1B0A9BD900186F1D /* inject.js */; };
 		2262F0E11B0B842F00186F1D /* WAMApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 2262F0E01B0B842F00186F1D /* WAMApplication.m */; };
 		2262F0E41B0BF4C200186F1D /* WAMWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2262F0E31B0BF4C200186F1D /* WAMWebView.m */; };
+		226C98E61B0F564100515A14 /* noConnection.html in Resources */ = {isa = PBXBuildFile; fileRef = 226C98E51B0F564100515A14 /* noConnection.html */; };
 		22D3AC7B1B0D574D005FCA4B /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22D3AC7A1B0D574D005FCA4B /* Sparkle.framework */; };
 		22D3AC7D1B0D57A3005FCA4B /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22D3AC7A1B0D574D005FCA4B /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22D3AC7F1B0D58C3005FCA4B /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 22D3AC7E1B0D58C3005FCA4B /* dsa_pub.pem */; };
@@ -48,6 +49,7 @@
 		2262F0E01B0B842F00186F1D /* WAMApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAMApplication.m; sourceTree = "<group>"; };
 		2262F0E21B0BF4C200186F1D /* WAMWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAMWebView.h; sourceTree = "<group>"; };
 		2262F0E31B0BF4C200186F1D /* WAMWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAMWebView.m; sourceTree = "<group>"; };
+		226C98E51B0F564100515A14 /* noConnection.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noConnection.html; sourceTree = "<group>"; };
 		22D3AC7A1B0D574D005FCA4B /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		22D3AC7E1B0D58C3005FCA4B /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +89,7 @@
 			children = (
 				22D3AC7E1B0D58C3005FCA4B /* dsa_pub.pem */,
 				2262F0DD1B0A9BD900186F1D /* inject.js */,
+				226C98E51B0F564100515A14 /* noConnection.html */,
 				223C319A1B07B66500E09138 /* AppDelegate.h */,
 				223C319B1B07B66500E09138 /* AppDelegate.m */,
 				2262F0DF1B0B842F00186F1D /* WAMApplication.h */,
@@ -181,6 +184,7 @@
 				22D3AC7F1B0D58C3005FCA4B /* dsa_pub.pem in Resources */,
 				223C31BE1B08167D00E09138 /* MainMenu.xib in Resources */,
 				2262F0DE1B0A9BD900186F1D /* inject.js in Resources */,
+				226C98E61B0F564100515A14 /* noConnection.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
