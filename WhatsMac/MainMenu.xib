@@ -32,6 +32,12 @@
                                     <action selector="checkForUpdates:" target="G8N-Ob-zSb" id="8Rw-VO-QT8"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="dmJ-G0-0Is"/>
+                            <menuItem title="Reload From Server" keyEquivalent="r" id="365-gz-eEk">
+                                <connections>
+                                    <action selector="reloadPage:" target="dKU-pJ-OAl" id="9jt-lm-BqN"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
                             <menuItem title="Services" id="NMo-om-nkz">
                                 <modifierMask key="keyEquivalentModifierMask"/>

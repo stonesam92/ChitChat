@@ -76,7 +76,7 @@
     //Whatsapp web only works with specific user agents
     _webView._customUserAgent = @"Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
     
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://web.whatsapp.com"]];
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://web.whatsapp.com"]];
     [_webView loadRequest:urlRequest];
     [_window makeKeyAndOrderFront:self];
     
@@ -159,6 +159,11 @@
     [self.faq makeKeyAndOrderFront:self];
 }
 
+- (IBAction)reloadPage:(id)sender {
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://web.whatsapp.com"]];
+    [self.webView loadRequest:urlRequest];
+}
+
 - (void)setActiveConversationAtIndex:(NSString*)index {
     [self.webView evaluateJavaScript:
      [NSString stringWithFormat:@"setActiveConversationAtIndex(%@)", index]
@@ -171,12 +176,23 @@
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSURL *url = navigationAction.request.URL;
     
-    if ([url.host hasSuffix:@"whatsapp.com"] || [url.host hasSuffix:@"whatsapp.net"]) {
+    if ([url.host hasSuffix:@"whatsapp.com"] || [url.host hasSuffix:@"whatsapp.net"] ||
+        [url.scheme isEqualToString:@"file"]) {
         decisionHandler(WKNavigationActionPolicyAllow);
     } else {
         decisionHandler(WKNavigationActionPolicyCancel);
         [[NSWorkspace sharedWorkspace] openURL:url];
     }
+}
+
+- (void)webView:(WKWebView*)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"Failed navigation with error: %@", error);
+    [self showFailedConnectionPage];
+}
+
+- (void)webView:(WKWebView*)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"Failed navigation with error: %@", error);
+    [self showFailedConnectionPage];
 }
 
 - (WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures
@@ -285,5 +301,11 @@
     window.releasedWhenClosed = YES;
     CFBridgingRetain(window);
     return window;
+}
+
+- (void)showFailedConnectionPage {
+    NSURL *failedPageURL = [[NSBundle mainBundle] URLForResource:@"noConnection" withExtension:@"html"];
+    NSURLRequest *failedPageRequest = [NSURLRequest requestWithURL:failedPageURL];
+    [self.webView loadRequest:failedPageRequest];
 }
 @end
