@@ -35,11 +35,11 @@ Most features of WhatsApp Web are currently supported, and support for the remai
 
 ##Note To WhatsApp
 
-Given the [recent situation regarding WhatsAPI](https://github.com/venomous0x/WhatsAPI), I feel obliged to stress that thir project does **not** attempt to reverse engineer the WhatsApp API or attempt to reimplement any part of the WhatsApp client's communications with the WhatsApp servers. 
+Given the [recent situation regarding WhatsAPI](https://github.com/venomous0x/WhatsAPI), I feel obliged to stress that this project does **not** attempt to reverse engineer the WhatsApp API or attempt to reimplement any part of the WhatsApp client's communications with the WhatsApp servers. 
 
-Any communication between the user and WhatsApp servers is handled by WhatsApp Web itself; this is mere native wrapper for WhatsApp Web, more akin to a clone of Safari than to a clone of any WhatsApp software.
+Any communication between the user and WhatsApp servers is handled by WhatsApp Web itself; this is merely a native wrapper for WhatsApp Web, more akin to a clone of Safari than of any WhatsApp software.
 
-Having read the WhatsApp EULA I believe that, since this project does not make any attempt to reverse engineer or automate any parts of the WhatsApp service, it is compliant with WhatsApp's terms of service.
+Having read the WhatsApp EULA, I believe that, since this project does not make any attempt to reverse engineer or automate any parts of the WhatsApp service, it is compliant with WhatsApp's terms of service.
 
 If this is not the case, please contact me at stonesam92@gmail.com and I will take down the project.
 
