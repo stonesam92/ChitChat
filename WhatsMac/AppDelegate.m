@@ -217,23 +217,6 @@
     return nil;
 }
 
-//- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
-//    NSURLResponse *response = (NSHTTPURLResponse*)navigationResponse.response;
-//    
-//    if ([response.URL.host hasSuffix:@"whatsapp.net"] &&
-//        [response isKindOfClass:[NSHTTPURLResponse class]]) {
-//        
-//        decisionHandler(WKNavigationResponsePolicyCancel);
-//        NSAlert *downloadMediaAlert = [[NSAlert alloc] init];
-//        downloadMediaAlert.messageText = @"To download media, please just drag it from this window into Finder.";
-//        [downloadMediaAlert addButtonWithTitle:@"OK"];
-//        [downloadMediaAlert runModal];
-//    } else {
-//        //else it is an internal web.whatsapp.com page
-//        decisionHandler(WKNavigationResponsePolicyAllow);
-//    }
-//}
-
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
     NSArray *messageBody = message.body;
     NSUserNotification *notification = [NSUserNotification new];
@@ -287,12 +270,6 @@
         [buttonView setFrameOrigin:buttonFrame.origin];
     };
     
-}
-
-- (void)downloadMedia:(NSURL*)mediaURL filename:(NSString*)filename{
-    NSString *pathToDownload = [NSString stringWithFormat:@"~/Downloads/%@", filename];
-    NSData *mediaData = [NSData dataWithContentsOfURL:mediaURL];
-    [mediaData writeToFile:[pathToDownload stringByExpandingTildeInPath] atomically:YES];
 }
 
 - (NSWindow*)createWindow:(NSString*)identifier title:(NSString*)title URL:(NSString*)url {
