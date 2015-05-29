@@ -23,8 +23,13 @@
     NSURL *pathToJS = [[NSBundle mainBundle] URLForResource:@"inject" withExtension:@"js"];
     NSString *injectedJS = [NSString stringWithContentsOfURL:pathToJS encoding:NSUTF8StringEncoding error:nil];
     WKUserScript *userScript = [[WKUserScript alloc] initWithSource:injectedJS
-                                                      injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                                      injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
                                                    forMainFrameOnly:NO];
+    NSURL *jqueryURL = [[NSBundle mainBundle] URLForResource:@"jquery" withExtension:@"js"];
+    NSString *jquery = [NSString stringWithContentsOfURL:jqueryURL encoding:NSUTF8StringEncoding error:nil];
+    WKUserScript *jqueryUserScript = [[WKUserScript alloc] initWithSource:jquery
+                                                            injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:NO];
+    [contentController addUserScript:jqueryUserScript];
     [contentController addUserScript:userScript];
     [contentController addScriptMessageHandler:self name:@"notification"];
     config.userContentController = contentController;
@@ -182,7 +187,8 @@
         decisionHandler(WKNavigationActionPolicyCancel);
         
         NSAlert *downloadMediaAlert = [[NSAlert alloc] init];
-        downloadMediaAlert.messageText = @"To download media, please just drag it from this window into Finder.";
+        downloadMediaAlert.messageText = @"Downloading Media";
+        downloadMediaAlert.informativeText = @"To download media, please just drag and drop it from this window into Finder.";
         [downloadMediaAlert addButtonWithTitle:@"OK"];
         [downloadMediaAlert runModal];
     } else {
@@ -234,6 +240,15 @@
     notification.title = messageBody[0];
     notification.subtitle = messageBody[1];
     [[NSUserNotificationCenter defaultUserNotificationCenter] scheduleNotification:notification];
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)())completionHandler {
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = @"Uploading Media";
+    alert.informativeText = message;
+    [alert addButtonWithTitle:@"OK"];
+    [alert runModal];
+    completionHandler();
 }
 
 # pragma mark Utils
