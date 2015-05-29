@@ -1,4 +1,8 @@
 // injected into the weview as a user script
+jQuery.noConflict();
+jQuery(document).on("click", "input[type='file']", function() {
+                    alert("To upload media, drag and drop the file into the WhatsApp Web window.");
+                    });
 
 this.Notification = function(title, options) {
     n = [title, options];
@@ -7,6 +11,7 @@ this.Notification = function(title, options) {
 };
 this.Notification.permission = 'granted';
 this.Notification.requestPermission = function(callback) {callback('granted');};
+
 
 var styleAdditions = document.createElement('style');
 styleAdditions.textContent = 'div.pane-list-user {opacity:0;} \
