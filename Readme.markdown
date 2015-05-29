@@ -1,6 +1,10 @@
 #WhatsMac
 
-A Mac app wrapper around WhatsApp's web client, [WhatsApp Web](https://web.whatsapp.com). The latest version is available [here](https://github.com/stonesam92/WhatsMac/releases/latest). (Requires OSX 10.10 Yosemite, since it is based on `WKWebView`)
+A Mac app wrapper around WhatsApp's web client, [WhatsApp Web](https://web.whatsapp.com). 
+
+The latest version is available [here](https://github.com/stonesam92/WhatsMac/releases/latest). Need help? Ask me on Twitter [here](https://twitter.com/cmdshiftn).
+
+Requires OSX 10.10 Yosemite and a WhatsApp Web compatible device (ie. **not** an iPhone unfortunately, [unless you're jailbroken](http://www.igeeksblog.com/how-to-setup-and-use-whatsapp-web-with-iphone/))
   
 ![WhatsMac Screenshot](http://i.imgur.com/riXrTvx.jpg "WhatsMac Screenshot")
 
