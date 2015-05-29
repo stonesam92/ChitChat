@@ -176,9 +176,15 @@
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     NSURL *url = navigationAction.request.URL;
     
-    if ([url.host hasSuffix:@"whatsapp.com"] || [url.host hasSuffix:@"whatsapp.net"] ||
-        [url.scheme isEqualToString:@"file"]) {
+    if ([url.host hasSuffix:@"whatsapp.com"] || [url.scheme isEqualToString:@"file"]) {
         decisionHandler(WKNavigationActionPolicyAllow);
+    } else if ([url.host hasSuffix:@"whatsapp.net"]) {
+        decisionHandler(WKNavigationActionPolicyCancel);
+        
+        NSAlert *downloadMediaAlert = [[NSAlert alloc] init];
+        downloadMediaAlert.messageText = @"To download media, please just drag it from this window into Finder.";
+        [downloadMediaAlert addButtonWithTitle:@"OK"];
+        [downloadMediaAlert runModal];
     } else {
         decisionHandler(WKNavigationActionPolicyCancel);
         [[NSWorkspace sharedWorkspace] openURL:url];
@@ -205,27 +211,22 @@
     return nil;
 }
 
-- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
-    NSURLResponse *response = (NSHTTPURLResponse*)navigationResponse.response;
-    
-    if ([response.URL.host hasSuffix:@"whatsapp.net"] &&
-        [response isKindOfClass:[NSHTTPURLResponse class]]) {
-        
-        decisionHandler(WKNavigationResponsePolicyCancel);
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-        NSString *contentDisposition = httpResponse.allHeaderFields[@"Content-Disposition"];
-        if ([contentDisposition hasPrefix:@"attachment"]) {
-            NSString *filename = [contentDisposition componentsSeparatedByString:@"\""][1];
-            [self downloadMedia:httpResponse.URL filename:filename];
-        } else {
-            //media link no longer valid
-            NSLog(@"media no longer available");
-        }
-    } else {
-        //else it is an internal web.whatsapp.com page
-        decisionHandler(WKNavigationResponsePolicyAllow);
-    }
-}
+//- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+//    NSURLResponse *response = (NSHTTPURLResponse*)navigationResponse.response;
+//    
+//    if ([response.URL.host hasSuffix:@"whatsapp.net"] &&
+//        [response isKindOfClass:[NSHTTPURLResponse class]]) {
+//        
+//        decisionHandler(WKNavigationResponsePolicyCancel);
+//        NSAlert *downloadMediaAlert = [[NSAlert alloc] init];
+//        downloadMediaAlert.messageText = @"To download media, please just drag it from this window into Finder.";
+//        [downloadMediaAlert addButtonWithTitle:@"OK"];
+//        [downloadMediaAlert runModal];
+//    } else {
+//        //else it is an internal web.whatsapp.com page
+//        decisionHandler(WKNavigationResponsePolicyAllow);
+//    }
+//}
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
     NSArray *messageBody = message.body;
