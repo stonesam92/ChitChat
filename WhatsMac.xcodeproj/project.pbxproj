@@ -19,6 +19,7 @@
 		22D3AC7B1B0D574D005FCA4B /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22D3AC7A1B0D574D005FCA4B /* Sparkle.framework */; };
 		22D3AC7D1B0D57A3005FCA4B /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 22D3AC7A1B0D574D005FCA4B /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22D3AC7F1B0D58C3005FCA4B /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 22D3AC7E1B0D58C3005FCA4B /* dsa_pub.pem */; };
+		22FD6F861B18DE3A001B593D /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 22FD6F851B18DE3A001B593D /* jquery.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,7 @@
 		226C98E51B0F564100515A14 /* noConnection.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noConnection.html; sourceTree = "<group>"; };
 		22D3AC7A1B0D574D005FCA4B /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		22D3AC7E1B0D58C3005FCA4B /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		22FD6F851B18DE3A001B593D /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			children = (
 				22D3AC7E1B0D58C3005FCA4B /* dsa_pub.pem */,
 				2262F0DD1B0A9BD900186F1D /* inject.js */,
+				22FD6F851B18DE3A001B593D /* jquery.js */,
 				226C98E51B0F564100515A14 /* noConnection.html */,
 				223C319A1B07B66500E09138 /* AppDelegate.h */,
 				223C319B1B07B66500E09138 /* AppDelegate.m */,
@@ -184,6 +187,7 @@
 				22D3AC7F1B0D58C3005FCA4B /* dsa_pub.pem in Resources */,
 				223C31BE1B08167D00E09138 /* MainMenu.xib in Resources */,
 				2262F0DE1B0A9BD900186F1D /* inject.js in Resources */,
+				22FD6F861B18DE3A001B593D /* jquery.js in Resources */,
 				226C98E61B0F564100515A14 /* noConnection.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
