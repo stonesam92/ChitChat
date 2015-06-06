@@ -13,15 +13,15 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>ChitChat</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0</string>
+	<string>1.1.0</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSHumanReadableCopyright</key>
@@ -31,7 +31,7 @@
 	<key>NSPrincipalClass</key>
 	<string>WAMApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/stonesam92/WhatsMac/master/update_appcast.xml</string>
+	<string>https://raw.githubusercontent.com/stonesam92/ChitChat/master/update_appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>
