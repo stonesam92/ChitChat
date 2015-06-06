@@ -1,4 +1,4 @@
-#WhatsMac
+#ChitChat (formerly WhatsMac)
 
 A Mac app wrapper around WhatsApp's web client, [WhatsApp Web](https://web.whatsapp.com). 
 
@@ -18,7 +18,7 @@ Allows you to receive notification center notifications for new messages, and ad
 | Search past conversations                      | ⌘F        |
 | Jump to your 1st .. 9th most recent converation| ⌘1 .. ⌘9  |
 
-Inspired by, and in small part based on, [Messenger for Mac](http://fbmacmessenger.rsms.me/), created by [Rasmus Andersson](https://twitter.com/rsms). WhatsMac uses some code from this project.
+Inspired by, and in small part based on, [Messenger for Mac](http://fbmacmessenger.rsms.me/), created by [Rasmus Andersson](https://twitter.com/rsms). ChitChat uses some code from this project.
 
 ##Feature Support
 
