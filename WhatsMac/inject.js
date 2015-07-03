@@ -82,6 +82,13 @@ jQuery(function () {
                     var $desiredItem = direction === 'UP' ? $selectedItem.prev() : $selectedItem.next();
                     if ($desiredItem.length > 0) {
                         $desiredItem[0].firstChild.click();
+                        // Gets the CSS transformY value
+                        var scrollPos = parseInt($($desiredItem[0])
+                                            .css('transform')
+                                            .split(',')
+                                            .slice()
+                                            .pop());
+                        $('.pane-list-body')[0].scrollTop = scrollPos;
                     }
                 }
             }
