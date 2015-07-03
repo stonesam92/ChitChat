@@ -51,3 +51,47 @@ function setActiveConversationAtIndex(index) {
     }
     conversationList.scrollTop = 0;
 }
+
+jQuery(function () {
+    (function ($) {
+        $(document).keydown(function (event) {
+            var direction = null;
+            switch (event.which) {
+                case 38:
+                    direction = 'UP';
+                    break;
+                case 40:
+                    direction = 'DOWN';
+                    break;
+                default:
+                    break;
+            }
+            var $input = $('.input');
+            var isInputFieldEmpty = $input.contents().length === 0 ||
+                                    $input.contents()[0].nodeName === 'BR';
+            if (direction && isInputFieldEmpty) {
+                var $selectedItem = null;
+                $.each($('.infinite-list-viewport .infinite-list-item'), function (index, value) {
+                    var $this = $(this);
+                    if ($this.children('.chat').hasClass('active')) {
+                        $selectedItem = $this;
+                        return false;
+                    }
+                });
+                if ($selectedItem) {
+                    var $desiredItem = direction === 'UP' ? $selectedItem.prev() : $selectedItem.next();
+                    if ($desiredItem.length > 0) {
+                        $desiredItem[0].firstChild.click();
+                        // Gets the CSS transformY value
+                        var scrollPos = parseInt($($desiredItem[0])
+                                            .css('transform')
+                                            .split(',')
+                                            .slice()
+                                            .pop());
+                        $('.pane-list-body')[0].scrollTop = scrollPos;
+                    }
+                }
+            }
+        });
+    })(jQuery);
+});

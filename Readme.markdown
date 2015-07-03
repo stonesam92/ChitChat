@@ -17,6 +17,7 @@ Allows you to receive notification center notifications for new messages, and ad
 | Start a new conversation                       | ⌘N        |
 | Search past conversations                      | ⌘F        |
 | Jump to your 1st .. 9th most recent converation| ⌘1 .. ⌘9  |
+| Scroll through your conversations              | ↑ and ↓   |
 
 Inspired by, and in small part based on, [Messenger for Mac](http://fbmacmessenger.rsms.me/), created by [Rasmus Andersson](https://twitter.com/rsms). ChitChat uses some code from this project.
 
