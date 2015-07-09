@@ -15,9 +15,10 @@ this.Notification.requestPermission = function(callback) {callback('granted');};
 
 var styleAdditions = document.createElement('style');
 styleAdditions.textContent = 'div.pane-list-user {opacity:0;} \
+div.pane-list-user > div.avatar { width: 0px; height: 0px; } \
 div.app-wrapper::before {opacity: 0;} \
 div.drawer-title {left:60px; bottom:17px;} \
-div.chat.media-chat > div.chat-avatar { opacity: 0; } \
+div.chat.media-chat > div.chat-avatar { opacity: 0;} \
 div.app.two { top: 0px; width: 100%; height: 100%; } \
 div.app.three { top: 0px; width: 100%; height: 100%; } \
 div.pane.pane-chat { width : 100%; } \
