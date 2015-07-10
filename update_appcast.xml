@@ -4,5 +4,22 @@
         <link>http://samstonedev.com/update_feed.xml</link>
         <description>A native Mac app wrapper for WhatsApp Web</description>
         <language>en</language>
+        <item>
+            <title>Version 1.2.0</title>
+            <description><![CDATA[
+                <h4>NOTE: This update cannot be applied automatically and must be downloaded manually by clicking "Learn More"</h4>
+                    <h2>Changes</h2>
+                    <ul>
+                        <li>WhatsMac is now named ChitChat</li>
+                        <li>Fix for no-images bug caused by recent WhatsApp Web changes</li>
+                        <li>Various graphical fixes</li>
+                        <li>Additional keyboard shortcuts (see README)</li>
+                        <li>The app is now signed with a developer certificate so is allowed by GateKeeper</li>
+                    </ul>
+                ]]></description>
+            <pubDate>Fri, 10 Jul 2015 12:30:00 +0000</pubDate>
+            <sparkle:version>1.2.0</sparkle:version>
+            <link>https://github.com/stonesam92/ChitChat/releases/tag/v1.2.0</link>
+        </item>
     </channel>
 </rss>
