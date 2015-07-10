@@ -1,0 +1,23 @@
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+    <channel>
+        <title>WhatsMac</title>
+        <link>http://samstonedev.com/update_feed.xml</link>
+        <description>A native Mac app wrapper for WhatsApp Web</description>
+        <language>en</language>
+        <item>
+            <title>Version 1.2.0</title>
+            <description><![CDATA[
+                    <h2>Changes</h2>
+                    <ul>
+                        <li>WhatsMac is now named ChitChat</li>
+                        <li>Fix for no-images bug caused by recent WhatsApp Web changes</li>
+                        <li>Various graphical fixes</li>
+                        <li>Additional keyboard shortcuts (see README)</li>
+                    </ul>
+                ]]></description>
+            <pubDate>Fri, 10 Jul 2015 12:30:00 +0000</pubDate>
+            <sparkle:version>1.2.0</sparkle:version>
+            <link>https://github.com/stonesam92/ChitChat/releases/tag/v1.2.0</link>
+        </item>
+    </channel>
+</rss>
