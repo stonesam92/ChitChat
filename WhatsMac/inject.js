@@ -55,7 +55,26 @@ function setActiveConversationAtIndex(index) {
 
 jQuery(function () {
     (function ($) {
+
+        var CHAT_ITEM_HEIGHT;
+
+        function offsetOfListItem($item) {
+            return parseInt($item.css('transform')
+                                    .split(',')
+                                    .slice()
+                                    .pop()) 
+        }
+
+        function indexOfListItem($item) {
+            return offsetOfListItem($item) / CHAT_ITEM_HEIGHT;
+        }
+
         $(document).keydown(function (event) {
+
+            if (!CHAT_ITEM_HEIGHT) {
+                CHAT_ITEM_HEIGHT = parseInt($($('.infinite-list-viewport .infinite-list-item')[0]).height());
+            }
+
             var direction = null;
             switch (event.which) {
                 case 38:
@@ -72,7 +91,8 @@ jQuery(function () {
                                     $input.contents()[0].nodeName === 'BR';
             if (direction && isInputFieldEmpty) {
                 var $selectedItem = null;
-                $.each($('.infinite-list-viewport .infinite-list-item'), function (index, value) {
+                var $infiniteListItems = $('.infinite-list-viewport .infinite-list-item');
+                $.each($infiniteListItems, function () {
                     var $this = $(this);
                     if ($this.children('.chat').hasClass('active')) {
                         $selectedItem = $this;
@@ -80,17 +100,19 @@ jQuery(function () {
                     }
                 });
                 if ($selectedItem) {
-                    var $desiredItem = direction === 'UP' ? $selectedItem.prev() : $selectedItem.next();
-                    if ($desiredItem.length > 0) {
-                        $desiredItem[0].firstChild.click();
-                        // Gets the CSS transformY value
-                        var scrollPos = parseInt($($desiredItem[0])
-                                            .css('transform')
-                                            .split(',')
-                                            .slice()
-                                            .pop());
-                        $('.pane-list-body')[0].scrollTop = scrollPos;
-                    }
+                    var selectedIndex = indexOfListItem($selectedItem);
+                    var desiredIndex = direction === 'UP' ? Math.max(selectedIndex - 1, 0) : selectedIndex + 1;
+
+                    $.each($infiniteListItems, function () {
+                        var $this = $(this);
+                        if (indexOfListItem($this) === desiredIndex) {
+                            var desiredItem = $this.get(0);
+                            desiredItem.firstChild.click();
+                            var scrollPos = offsetOfListItem($(desiredItem));
+                            $('.pane-list-body')[0].scrollTop = scrollPos;
+                            return false;
+                        }
+                    });
                 }
             }
         });
