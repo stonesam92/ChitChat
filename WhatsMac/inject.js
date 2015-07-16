@@ -1,10 +1,10 @@
-// injected into the weview as a user script
+// injected into the webview as a user script
 jQuery.noConflict();
-jQuery(document).on("click", "input[type='file']", function() {
-                    alert("To upload media, drag and drop the file into the WhatsApp Web window.");
-                    });
+jQuery(document).on('click', 'input[type="file"]', function () {
+    alert('To upload media, drag and drop the file into the WhatsApp Web window.');
+});
 
-this.Notification = function(title, options) {
+this.Notification = function (title, options) {
     n = [title, options];
     console.log(options);
     webkit.messageHandlers.notification.postMessage([title, options.body]);
@@ -26,55 +26,77 @@ div.pane.pane-intro { width : 100%; } \
 ';
 document.documentElement.appendChild(styleAdditions);
 
-function activateSearchField() {
+function activateSearchField () {
     document.querySelector('input.input-search').focus();
 }
 
-function newConversation() {
+function newConversation () {
     document.querySelector('button.icon-chat').click();
     document.querySelector('input.input-search').focus();
     
-    var header=document.querySelector('div.drawer-title');
+    var header = document.querySelector('div.drawer-title');
     header.style.left = '0px';
     header.style.bottom = '12px';
 }
 
-function setActiveConversationAtIndex(index) {
-    //scroll to top of the conversation list
+var CHAT_ITEM_HEIGHT;
+
+function offsetOfListItem ($item) {
+    return parseInt($item.css('transform')
+                            .split(',')
+                            .slice()
+                            .pop());
+}
+
+function indexOfListItem ($item) {
+    return offsetOfListItem($item) / CHAT_ITEM_HEIGHT;
+}
+
+function clickOnItemWithIndex (index, scrollToItem) {
+    var $ = jQuery;
+    var $infiniteListItems = $('.infinite-list-viewport .infinite-list-item');
+    $.each($infiniteListItems, function () {
+        var $this = $(this);
+        if (indexOfListItem($this) === index) {
+                var desiredItem = $this.get(0);
+                desiredItem.firstChild.click();
+                if (scrollToItem) {
+                    var scrollPos = offsetOfListItem($(desiredItem));
+                    $('.pane-list-body')[0].scrollTop = scrollPos;
+                }
+                return false;
+        }
+    });
+}
+
+function setActiveConversationAtIndex (index) {
+    if (index < 1 || index > 9) {
+        return;
+    }
+    // Scroll to top of the conversation list
     var conversationList = document.querySelector('div.pane-list-body');
     if (conversationList.scrollTop == 0) {
-        document.querySelector('div:nth-child('+index+').infinite-list-item').firstChild.click();
+        clickOnItemWithIndex(index - 1, false);
     } else {
-        new MutationObserver(function() {
-                             document.querySelector('div:nth-child('+index+').infinite-list-item').firstChild.click();
-                             this.disconnect();
-                             }).observe(conversationList, {attributes: true, childList: true, subtree: true});
+        new MutationObserver(function () {
+                                clickOnItemWithIndex(index - 1, false);
+                                this.disconnect();
+                            })
+                            .observe(conversationList, {
+                                attributes: true,
+                                childList: true,
+                                subtree: true
+                            });
     }
     conversationList.scrollTop = 0;
 }
 
 jQuery(function () {
     (function ($) {
-
-        var CHAT_ITEM_HEIGHT;
-
-        function offsetOfListItem($item) {
-            return parseInt($item.css('transform')
-                                    .split(',')
-                                    .slice()
-                                    .pop()) 
-        }
-
-        function indexOfListItem($item) {
-            return offsetOfListItem($item) / CHAT_ITEM_HEIGHT;
-        }
-
         $(document).keydown(function (event) {
-
             if (!CHAT_ITEM_HEIGHT) {
                 CHAT_ITEM_HEIGHT = parseInt($($('.infinite-list-viewport .infinite-list-item')[0]).height());
             }
-
             var direction = null;
             switch (event.which) {
                 case 38:
@@ -102,17 +124,7 @@ jQuery(function () {
                 if ($selectedItem) {
                     var selectedIndex = indexOfListItem($selectedItem);
                     var desiredIndex = direction === 'UP' ? Math.max(selectedIndex - 1, 0) : selectedIndex + 1;
-
-                    $.each($infiniteListItems, function () {
-                        var $this = $(this);
-                        if (indexOfListItem($this) === desiredIndex) {
-                            var desiredItem = $this.get(0);
-                            desiredItem.firstChild.click();
-                            var scrollPos = offsetOfListItem($(desiredItem));
-                            $('.pane-list-body')[0].scrollTop = scrollPos;
-                            return false;
-                        }
-                    });
+                    clickOnItemWithIndex(desiredIndex, true);
                 }
             }
         });
