@@ -62,7 +62,7 @@ function clickOnItemWithIndex (index, scrollToItem) {
                 desiredItem.firstChild.click();
                 if (scrollToItem) {
                     var scrollPos = offsetOfListItem($(desiredItem));
-                    $('.pane-list-body')[0].scrollTop = scrollPos;
+                    $('.pane-list-body').stop().animate({scrollTop: scrollPos}, 150);
                 }
                 return false;
         }
