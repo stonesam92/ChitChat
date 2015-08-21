@@ -61,8 +61,19 @@ function clickOnItemWithIndex (index, scrollToItem) {
                 var desiredItem = $this.get(0);
                 desiredItem.firstChild.click();
                 if (scrollToItem) {
-                    var scrollPos = offsetOfListItem($(desiredItem));
-                    $('.pane-list-body').stop().animate({scrollTop: scrollPos}, 150);
+					$scrollView = $('.pane-list-body');
+					$desiredItem = $(desiredItem);
+					
+					// Check whether the desired item is not inside the viewport (below)
+					if ($desiredItem.position().top + CHAT_ITEM_HEIGHT > $scrollView.scrollTop() + $scrollView.height()) {
+	                    var scrollPos = $desiredItem.position().top - $scrollView.height() + CHAT_ITEM_HEIGHT;
+	                    $scrollView.stop().animate({scrollTop: scrollPos}, 150);
+					}
+					// Check whether the desired item is not inside the viewport (above)
+					else if ($desiredItem.position().top < $scrollView.scrollTop()) {
+	                    var scrollPos = $desiredItem.position().top;
+	                    $scrollView.stop().animate({scrollTop: scrollPos}, 150);
+					}					
                 }
                 return false;
         }
