@@ -112,6 +112,7 @@ jQuery(function () {
             var isInputFieldEmpty = $input.contents().length === 0 ||
                                     $input.contents()[0].nodeName === 'BR';
             if (direction && isInputFieldEmpty) {
+                event.preventDefault();
                 var $selectedItem = null;
                 var $infiniteListItems = $('.infinite-list-viewport .infinite-list-item');
                 $.each($infiniteListItems, function () {
