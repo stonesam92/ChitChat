@@ -20,6 +20,23 @@
             <pubDate>Fri, 10 Jul 2015 12:30:00 +0000</pubDate>
             <sparkle:version>1.2.0</sparkle:version>
             <link>https://github.com/stonesam92/ChitChat/releases/tag/v1.2.0</link>
+         </item>
+         <item>
+            <title>Version 1.3.0</title>
+            <description><![CDATA[
+                <h4>NOTE: If you are still running a version of ChitChat released as WhatsMac then his update cannot be applied automatically and must be downloaded manually from <a href="https://github.com/stonesam92/ChitChat/releases/tag/v1.3">release page</a>.</h4>
+                    <h2>Changes</h2>
+                    <ul>
+                        <li>Fix for "Safari Version" bug introduced Aug 2015</li>
+                        <li>Usability Fixes</li>
+                        <li>Various graphical fixes</li>
+                        <li>Now supports iOS devices without jailbreak!</li>
+                    </ul>
+                ]]></description>
+            <pubDate>Fri, 21 Aug 2015 22:30:00 +0000</pubDate>
+            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/v1.3/ChitChat.zip"
+               sparkle:version="1.3"
+               type="application/octet-stream" />
         </item>
     </channel>
 </rss>
