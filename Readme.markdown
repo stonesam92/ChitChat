@@ -36,18 +36,6 @@ Most features of WhatsApp Web are currently supported, and support for the remai
 
 \*Media uploading **is** supported when dragging the image/video file into the app's window. Uploading using the upload button is currently not supported, since WKWebView provides no easy mechanism for using `<input type="file">` tags.
 
-**Note**: the app is not signed with an Apple developer cert. If you have Gatekeeper enabled, the first time you run it you must right click the app in Finder and select "Open".
-
-##Note To WhatsApp
-
-Given the [recent situation regarding WhatsAPI](https://github.com/venomous0x/WhatsAPI), I feel obliged to stress that this project does **not** attempt to reverse engineer the WhatsApp API or attempt to reimplement any part of the WhatsApp client's communications with the WhatsApp servers. 
-
-Any communication between the user and WhatsApp servers is handled by WhatsApp Web itself; this is merely a native wrapper for WhatsApp Web, more akin to a clone of Safari than of any WhatsApp software.
-
-Having read the WhatsApp EULA, I believe that, since this project does not make any attempt to reverse engineer or automate any parts of the WhatsApp service, it is compliant with WhatsApp's terms of service.
-
-If this is not the case, please contact me at stonesam92@gmail.com and I will take down the project.
-
 ##License
   
   
@@ -58,3 +46,9 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+##Note
+
+This project does **not** attempt to reverse engineer the WhatsApp API or attempt to reimplement any part of the WhatsApp client's communications with the WhatsApp servers. 
+
+Any communication between the user and WhatsApp servers is handled by WhatsApp Web itself; this is merely a native wrapper for WhatsApp Web, more akin to a clone of Safari than of any WhatsApp software.
