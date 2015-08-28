@@ -9,6 +9,7 @@
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
 @property (strong, nonatomic) NSView* titlebarView;
+@property (strong, nonatomic) NSStatusItem *statusItem;
 @property (weak, nonatomic) NSWindow *legal;
 @property (weak, nonatomic) NSWindow *faq;
 @property (strong, nonatomic) NSString *notificationCount;
@@ -69,6 +70,8 @@
     
     _titlebarView = [_window standardWindowButton:NSWindowCloseButton].superview;
     [self updateWindowTitlebar];
+    
+    [self createStatusItem];
 
     _webView = [[WAMWebView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)
                                   configuration:[self webViewConfig]];
@@ -86,6 +89,18 @@
     [_window makeKeyAndOrderFront:self];
     
     [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
+}
+
+
+- (void)createStatusItem {
+    self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+    [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
+    self.statusItem.action = @selector(showAppWindow:);
+}
+
+
+- (void)showAppWindow:(id)sender {
+    [NSApp activateIgnoringOtherApps:YES];
 }
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification {
@@ -141,6 +156,15 @@
 - (void)setNotificationCount:(NSString *)notificationCount {
     if (![_notificationCount isEqualToString:notificationCount]) {
         [[NSApp dockTile] setBadgeLabel:notificationCount];
+        
+        NSInteger badgeCount = notificationCount.integerValue;
+        
+        if (badgeCount) {
+            [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconUnread"]];
+        }
+        else {
+            [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
+        }
     }
     _notificationCount = notificationCount;
 }
