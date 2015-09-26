@@ -245,6 +245,9 @@
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    if ([[self window] isMainWindow]) {
+        return;
+    }
     NSArray *messageBody = message.body;
     NSUserNotification *notification = [NSUserNotification new];
     notification.title = messageBody[0];
@@ -253,14 +256,18 @@
     [[NSUserNotificationCenter defaultUserNotificationCenter] scheduleNotification:notification];
 }
 
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
+    return YES;
+}
+
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
     [self.webView evaluateJavaScript:
      [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
-                   completionHandler:nil];
+        completionHandler:nil];
     [center removeDeliveredNotification:notification];
 }
 
-- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)())completionHandler {
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = @"Uploading Media";
     alert.informativeText = message;

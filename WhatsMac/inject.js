@@ -5,13 +5,10 @@ jQuery(document).on('click', 'input[type="file"]', function () {
 });
 
 this.Notification = function (title, options) {
-    n = [title, options];
-    console.log(options);
     webkit.messageHandlers.notification.postMessage([title, options.body, options.tag]);
 };
 this.Notification.permission = 'granted';
 this.Notification.requestPermission = function(callback) {callback('granted');};
-
 
 var styleAdditions = document.createElement('style');
 styleAdditions.textContent = 'div.pane-list-user { opacity:0; } \
