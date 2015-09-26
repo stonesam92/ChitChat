@@ -7,7 +7,7 @@ jQuery(document).on('click', 'input[type="file"]', function () {
 this.Notification = function (title, options) {
     n = [title, options];
     console.log(options);
-    webkit.messageHandlers.notification.postMessage([title, options.body]);
+    webkit.messageHandlers.notification.postMessage([title, options.body, options.tag]);
 };
 this.Notification.permission = 'granted';
 this.Notification.requestPermission = function(callback) {callback('granted');};
@@ -94,6 +94,12 @@ function clickOnItemWithIndex (index, scrollToItem) {
                 return false;
         }
     });
+}
+
+function openChat (rawTag) {
+    var $ = jQuery;
+    var tag = rawTag.replace('.', '=1');
+    $('div.chat[data-reactid*="' + tag + '"]').first().click();
 }
 
 function setActiveConversationAtIndex (index) {

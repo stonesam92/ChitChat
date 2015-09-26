@@ -5,7 +5,7 @@
 @import WebKit;
 @import Sparkle;
 
-@interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler>
+@interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
 @property (strong, nonatomic) NSView* titlebarView;
@@ -88,6 +88,8 @@
     [_webView loadRequest:urlRequest];
     [_window makeKeyAndOrderFront:self];
     
+    [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: self];
+    
     [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
 }
 
@@ -164,6 +166,7 @@
         }
         else {
             [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
+            [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
         }
     }
     _notificationCount = notificationCount;
@@ -246,7 +249,15 @@
     NSUserNotification *notification = [NSUserNotification new];
     notification.title = messageBody[0];
     notification.subtitle = messageBody[1];
+    notification.identifier = messageBody[2];
     [[NSUserNotificationCenter defaultUserNotificationCenter] scheduleNotification:notification];
+}
+
+- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
+    [self.webView evaluateJavaScript:
+     [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
+                   completionHandler:nil];
+    [center removeDeliveredNotification:notification];
 }
 
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)())completionHandler {
