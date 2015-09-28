@@ -98,16 +98,6 @@
 }
 
 - (BOOL)shouldPropagateMouseDownEvent:(NSEvent *)theEvent {
-  if( ![theEvent.window isEqual:_window] ) {
-    return YES;
-  }
-  
-  if( theEvent.locationInWindow.y < (_window.frame.size.height - 59) ) {
-    return YES;
-  }
-  
-  _initialDragPosition = theEvent.locationInWindow;
-  
   return YES;
 }
 
@@ -116,12 +106,13 @@
     return YES;
   }
   
-  if( theEvent.locationInWindow.y < (_window.frame.size.height - 59) ) {
-    return YES;
-  }
-
   if( !_isDragging ) {
     _isDragging = YES;
+    _initialDragPosition = theEvent.locationInWindow;
+  }
+  
+  if( _initialDragPosition.y < (_window.frame.size.height - 59) ) {
+    return YES;
   }
   
   NSPoint mouseLocation = [NSEvent mouseLocation];
