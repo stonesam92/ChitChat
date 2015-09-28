@@ -36,6 +36,8 @@ div.app.three, div.app.two { top: 0px; width: 100%; height: 100%; } \
     .drawer-container-mid, .drawer-container-right, .pane-chat, .pane-intro { width: calc(100% - 388px); } \
     .three .drawer-container-mid, .three .drawer-container-right, .three .pane-chat, .three .pane-intro { width: calc(100% - 718px); } \
 }\
+.image-thumb-lores { -webkit-transform: translate3d(0,0,0); } \
+.avatar-image { -webkit-transform: translate3d(0,0,0); } \
 ';
 document.documentElement.appendChild(styleAdditions);
 

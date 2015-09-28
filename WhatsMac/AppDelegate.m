@@ -3,7 +3,6 @@
 #import "WAMWebView.h"
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
-#import "WAMWindow.h"
 
 @import WebKit;
 @import Sparkle;
@@ -58,7 +57,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSInteger windowStyleFlags = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask | NSFullSizeContentViewWindowMask;
     _notificationCount = @"";
-    _window = [[WAMWindow alloc] initWithContentRect:CGRectMake(0, 0, 800, 600)
+    _window = [[NSWindow alloc] initWithContentRect:CGRectMake(0, 0, 800, 600)
                                           styleMask:windowStyleFlags
                                             backing:NSBackingStoreBuffered
                                               defer:YES];
