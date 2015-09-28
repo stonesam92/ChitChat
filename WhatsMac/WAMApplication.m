@@ -3,6 +3,27 @@
 
 @implementation WAMApplication
 - (void)sendEvent:(NSEvent *)theEvent {
+    if (theEvent.type == NSLeftMouseUp) {
+      if( [((AppDelegate*)self.delegate) shouldPropagateMouseUpEvent:theEvent] ) {
+        [super sendEvent:theEvent];
+      }
+      return;
+    }
+
+    if (theEvent.type == NSLeftMouseDown) {
+      if( [((AppDelegate*)self.delegate) shouldPropagateMouseDownEvent:theEvent] ) {
+        [super sendEvent:theEvent];
+      }
+      return;
+    }
+
+    if (theEvent.type == NSLeftMouseDragged) {
+      if( [((AppDelegate*)self.delegate) shouldPropagateMouseDraggedEvent:theEvent] ) {
+        [super sendEvent:theEvent];
+      }
+      return;
+    }
+
     if (theEvent.type == NSKeyDown && (theEvent.modifierFlags & NSCommandKeyMask)) {
         NSString *chars = theEvent.charactersIgnoringModifiers;
         if (chars.length == 1) {

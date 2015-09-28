@@ -1,6 +1,9 @@
 #import "AppDelegate.h"
 #import "WKWebView+Private.h"
 #import "WAMWebView.h"
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
+#import "WAMWindow.h"
 
 @import WebKit;
 @import Sparkle;
@@ -13,6 +16,8 @@
 @property (weak, nonatomic) NSWindow *legal;
 @property (weak, nonatomic) NSWindow *faq;
 @property (strong, nonatomic) NSString *notificationCount;
+@property (nonatomic) NSPoint initialDragPosition;
+@property (nonatomic) BOOL isDragging;
 @end
 
 @implementation AppDelegate
@@ -53,7 +58,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSInteger windowStyleFlags = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask | NSFullSizeContentViewWindowMask;
     _notificationCount = @"";
-    _window = [[NSWindow alloc] initWithContentRect:CGRectMake(0, 0, 800, 600)
+    _window = [[WAMWindow alloc] initWithContentRect:CGRectMake(0, 0, 800, 600)
                                           styleMask:windowStyleFlags
                                             backing:NSBackingStoreBuffered
                                               defer:YES];
@@ -64,7 +69,6 @@
     _window.releasedWhenClosed = NO;
     _window.delegate = self;
     _window.frameAutosaveName = @"main";
-    _window.movableByWindowBackground = YES;
     _window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
     [_window center];
     
@@ -83,16 +87,62 @@
     
     //Whatsapp web only works with specific user agents
     _webView._customUserAgent = @"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12";
-    
+  
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://web.whatsapp.com"]];
     [_webView loadRequest:urlRequest];
     [_window makeKeyAndOrderFront:self];
-    
+
     [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: self];
     
     [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
+    [_window makeFirstResponder:_window];
 }
 
+- (BOOL)shouldPropagateMouseDownEvent:(NSEvent *)theEvent {
+  if( ![theEvent.window isEqual:_window] ) {
+    return YES;
+  }
+  
+  if( theEvent.locationInWindow.y < (_window.frame.size.height - 59) ) {
+    return YES;
+  }
+  
+  _initialDragPosition = theEvent.locationInWindow;
+  
+  return YES;
+}
+
+- (BOOL)shouldPropagateMouseDraggedEvent:(NSEvent*)theEvent {
+  if( ![theEvent.window isEqual:_window] ) {
+    return YES;
+  }
+  
+  if( theEvent.locationInWindow.y < (_window.frame.size.height - 59) ) {
+    return YES;
+  }
+
+  if( !_isDragging ) {
+    _isDragging = YES;
+  }
+  
+  NSPoint mouseLocation = [NSEvent mouseLocation];
+  NSRect newFrame = NSRectFromCGRect(_window.frame);
+  newFrame.origin.x = mouseLocation.x - _initialDragPosition.x;
+  newFrame.origin.y = mouseLocation.y - _initialDragPosition.y;
+
+  [_window.animator setFrame:newFrame display:YES animate:NO];
+  
+  return NO;
+}
+
+- (BOOL)shouldPropagateMouseUpEvent:(NSEvent *)theEvent {
+  if( _isDragging ) {
+    _isDragging = NO;
+    return NO;
+  }
+  
+  return YES;
+}
 
 - (void)createStatusItem {
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
