@@ -1,11 +1,13 @@
 #import "AppDelegate.h"
 #import "WKWebView+Private.h"
 #import "WAMWebView.h"
+#import <AppKit/AppKit.h>
+#import <Foundation/Foundation.h>
 
 @import WebKit;
 @import Sparkle;
 
-@interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler>
+@interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
 @property (strong, nonatomic) NSView* titlebarView;
@@ -13,6 +15,8 @@
 @property (weak, nonatomic) NSWindow *legal;
 @property (weak, nonatomic) NSWindow *faq;
 @property (strong, nonatomic) NSString *notificationCount;
+@property (nonatomic) NSPoint initialDragPosition;
+@property (nonatomic) BOOL isDragging;
 @end
 
 @implementation AppDelegate
@@ -57,6 +61,7 @@
                                           styleMask:windowStyleFlags
                                             backing:NSBackingStoreBuffered
                                               defer:YES];
+    [_window center];
     _window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight];
     _window.titleVisibility = NSWindowTitleHidden;
     _window.titlebarAppearsTransparent = YES;
@@ -64,10 +69,8 @@
     _window.releasedWhenClosed = NO;
     _window.delegate = self;
     _window.frameAutosaveName = @"main";
-    _window.movableByWindowBackground = YES;
     _window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
-    [_window center];
-    
+  
     _titlebarView = [_window standardWindowButton:NSWindowCloseButton].superview;
     [self updateWindowTitlebar];
     
@@ -83,21 +86,54 @@
     
     //Whatsapp web only works with specific user agents
     _webView._customUserAgent = @"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/600.7.12 (KHTML, like Gecko) Version/8.0.7 Safari/600.7.12";
-    
+  
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://web.whatsapp.com"]];
     [_webView loadRequest:urlRequest];
     [_window makeKeyAndOrderFront:self];
+
+    [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: self];
     
     [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
 }
 
+- (BOOL)shouldPropagateMouseDraggedEvent:(NSEvent*)theEvent {
+  if( ![theEvent.window isEqual:_window] ) {
+    return YES;
+  }
+  
+  if( !_isDragging ) {
+    _isDragging = YES;
+    _initialDragPosition = theEvent.locationInWindow;
+  }
+  
+  if( _initialDragPosition.y < (_window.frame.size.height - 59) ) {
+    return YES;
+  }
+  
+  NSPoint mouseLocation = [NSEvent mouseLocation];
+  NSRect newFrame = NSRectFromCGRect(_window.frame);
+  newFrame.origin.x = mouseLocation.x - _initialDragPosition.x;
+  newFrame.origin.y = mouseLocation.y - _initialDragPosition.y;
+
+  [_window.animator setFrame:newFrame display:YES animate:NO];
+  
+  return NO;
+}
+
+- (BOOL)shouldPropagateMouseUpEvent:(NSEvent *)theEvent {
+  if( _isDragging ) {
+    _isDragging = NO;
+    return NO;
+  }
+  
+  return YES;
+}
 
 - (void)createStatusItem {
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
     self.statusItem.action = @selector(showAppWindow:);
 }
-
 
 - (void)showAppWindow:(id)sender {
     [NSApp activateIgnoringOtherApps:YES];
@@ -164,6 +200,7 @@
         }
         else {
             [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
+            [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
         }
     }
     _notificationCount = notificationCount;
@@ -242,14 +279,29 @@
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message {
+    if ([[self window] isMainWindow]) {
+        return;
+    }
     NSArray *messageBody = message.body;
     NSUserNotification *notification = [NSUserNotification new];
     notification.title = messageBody[0];
     notification.subtitle = messageBody[1];
+    notification.identifier = messageBody[2];
     [[NSUserNotificationCenter defaultUserNotificationCenter] scheduleNotification:notification];
 }
 
-- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)())completionHandler {
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
+    return YES;
+}
+
+- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
+    [self.webView evaluateJavaScript:
+     [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
+        completionHandler:nil];
+    [center removeDeliveredNotification:notification];
+}
+
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = @"Uploading Media";
     alert.informativeText = message;

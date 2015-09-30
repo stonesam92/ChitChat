@@ -5,13 +5,10 @@ jQuery(document).on('click', 'input[type="file"]', function () {
 });
 
 this.Notification = function (title, options) {
-    n = [title, options];
-    console.log(options);
-    webkit.messageHandlers.notification.postMessage([title, options.body]);
+    webkit.messageHandlers.notification.postMessage([title, options.body, options.tag]);
 };
 this.Notification.permission = 'granted';
 this.Notification.requestPermission = function(callback) {callback('granted');};
-
 
 var styleAdditions = document.createElement('style');
 styleAdditions.textContent = 'div.pane-list-user { opacity:0; } \
@@ -39,6 +36,8 @@ div.app.three, div.app.two { top: 0px; width: 100%; height: 100%; } \
     .drawer-container-mid, .drawer-container-right, .pane-chat, .pane-intro { width: calc(100% - 388px); } \
     .three .drawer-container-mid, .three .drawer-container-right, .three .pane-chat, .three .pane-intro { width: calc(100% - 718px); } \
 }\
+.image-thumb-lores { -webkit-transform: translate3d(0,0,0); } \
+.avatar-image { -webkit-transform: translate3d(0,0,0); } \
 ';
 document.documentElement.appendChild(styleAdditions);
 
@@ -94,6 +93,12 @@ function clickOnItemWithIndex (index, scrollToItem) {
                 return false;
         }
     });
+}
+
+function openChat (rawTag) {
+    var $ = jQuery;
+    var tag = rawTag.replace('.', '=1');
+    $('div.chat[data-reactid*="' + tag + '"]').first().click();
 }
 
 function setActiveConversationAtIndex (index) {
