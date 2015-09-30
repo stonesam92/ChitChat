@@ -61,6 +61,7 @@
                                           styleMask:windowStyleFlags
                                             backing:NSBackingStoreBuffered
                                               defer:YES];
+    [_window center];
     _window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantLight];
     _window.titleVisibility = NSWindowTitleHidden;
     _window.titlebarAppearsTransparent = YES;
@@ -69,8 +70,7 @@
     _window.delegate = self;
     _window.frameAutosaveName = @"main";
     _window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
-    [_window center];
-    
+  
     _titlebarView = [_window standardWindowButton:NSWindowCloseButton].superview;
     [self updateWindowTitlebar];
     
