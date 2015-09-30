@@ -10,13 +10,6 @@
       return;
     }
 
-    if (theEvent.type == NSLeftMouseDown) {
-      if( [((AppDelegate*)self.delegate) shouldPropagateMouseDownEvent:theEvent] ) {
-        [super sendEvent:theEvent];
-      }
-      return;
-    }
-
     if (theEvent.type == NSLeftMouseDragged) {
       if( [((AppDelegate*)self.delegate) shouldPropagateMouseDraggedEvent:theEvent] ) {
         [super sendEvent:theEvent];

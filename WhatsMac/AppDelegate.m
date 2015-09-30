@@ -94,11 +94,6 @@
     [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate: self];
     
     [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
-    [_window makeFirstResponder:_window];
-}
-
-- (BOOL)shouldPropagateMouseDownEvent:(NSEvent *)theEvent {
-  return YES;
 }
 
 - (BOOL)shouldPropagateMouseDraggedEvent:(NSEvent*)theEvent {
@@ -139,7 +134,6 @@
     [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
     self.statusItem.action = @selector(showAppWindow:);
 }
-
 
 - (void)showAppWindow:(id)sender {
     [NSApp activateIgnoringOtherApps:YES];
