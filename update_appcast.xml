@@ -24,7 +24,7 @@
          <item>
             <title>Version 1.3.0</title>
             <description><![CDATA[
-                <h4>NOTE: If you are still running a version of ChitChat released as WhatsMac then his update cannot be applied automatically and must be downloaded manually from <a href="https://github.com/stonesam92/ChitChat/releases/tag/v1.3">release page</a>.</h4>
+                <h4>NOTE: If you are still running a version of ChitChat released as WhatsMac then this update cannot be applied automatically and must be downloaded manually from <a href="https://github.com/stonesam92/ChitChat/releases/tag/v1.3">release page</a>.</h4>
                     <h2>Changes</h2>
                     <ul>
                         <li>Fix for "Safari Version" bug introduced Aug 2015</li>
@@ -36,6 +36,29 @@
             <pubDate>Fri, 21 Aug 2015 22:30:00 +0000</pubDate>
             <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/v1.3/ChitChat.zip"
                sparkle:version="1.3"
+               type="application/octet-stream" />
+        </item>
+        <item>
+            <title>Version 1.4.0</title>
+            <description><![CDATA[
+                <h4>NOTE: If you are still running a version of ChitChat released as WhatsMac (1.0) then this update cannot be applied automatically and must be downloaded manually from <a href="https://github.com/stonesam92/ChitChat/releases/tag/v1.3">release page</a>.</h4>
+                    <h2>Changes</h2>
+                    <ul>
+                        <li>Added 10.11 compatibility</li>
+                        <li>Improved scrolling performance</li>
+                        <li>Improved ChitChat's handling of notifications</li>
+                        <li>Added status bar icon</li>
+                    </ul>
+                    <h2>Credits</h2>
+                    <ul>
+                        <li>@congbach</li>
+                        <li>@tschoffelen</li>
+                        <li>@andersio (who contributed almost all of this release!)</li>
+                    </ul>
+                ]]></description>
+            <pubDate>Wed, 30 Sep 2015 21:30:00 +0000</pubDate>
+            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/v1.4/ChitChat.zip"
+               sparkle:version="1.4"
                type="application/octet-stream" />
         </item>
     </channel>
