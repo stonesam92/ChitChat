@@ -10,7 +10,6 @@
 @interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
-@property (strong, nonatomic) NSView* titlebarView;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (weak, nonatomic) NSWindow *legal;
 @property (weak, nonatomic) NSWindow *faq;
@@ -71,8 +70,7 @@
     _window.frameAutosaveName = @"main";
     _window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
   
-    _titlebarView = [_window standardWindowButton:NSWindowCloseButton].superview;
-    [self updateWindowTitlebar];
+    [self updateTitlebarOfWindow:_window forFullScreen:NO];
     
     [self createStatusItem];
 
@@ -153,8 +151,16 @@
     return YES;
 }
 
+- (void)windowWillEnterFullScreen:(NSNotification *)notification {
+  [self updateTitlebarOfWindow:_window forFullScreen:YES];
+}
+
+- (void)windowDidExitFullScreen:(NSNotification *)notification {
+  [self updateTitlebarOfWindow:_window forFullScreen:NO];
+}
+
 - (void)windowDidResize:(NSNotification *)notification {
-    [self updateWindowTitlebar];
+    [self updateTitlebarOfWindow:_window forFullScreen:NO];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -311,14 +317,13 @@
 }
 
 # pragma mark Utils
-- (void)updateWindowTitlebar {
+- (void)updateTitlebarOfWindow:(NSWindow*)window forFullScreen:(BOOL)fullScreen {
     const CGFloat kTitlebarHeight = 59;
     const CGFloat kFullScreenButtonYOrigin = 3;
-    CGRect windowFrame = _window.frame;
-    BOOL fullScreen = (_window.styleMask & NSFullScreenWindowMask) == NSFullScreenWindowMask;
-    
+    CGRect windowFrame = window.frame;
+  
     // Set size of titlebar container
-    NSView *titlebarContainerView = _titlebarView.superview;
+  NSView *titlebarContainerView = [window standardWindowButton:NSWindowCloseButton].superview.superview;
     CGRect titlebarContainerFrame = titlebarContainerView.frame;
     titlebarContainerFrame.origin.y = windowFrame.size.height - kTitlebarHeight;
     titlebarContainerFrame.size.height = kTitlebarHeight;
@@ -326,9 +331,9 @@
     
     // Set position of window buttons
     CGFloat buttonX = 12; // initial LHS margin, matching Safari 8.0 on OS X 10.10.
-    NSView *closeButton = [self.window standardWindowButton:NSWindowCloseButton];
-    NSView *minimizeButton = [self.window standardWindowButton:NSWindowMiniaturizeButton];
-    NSView *zoomButton = [self.window standardWindowButton:NSWindowZoomButton];
+    NSView *closeButton = [window standardWindowButton:NSWindowCloseButton];
+    NSView *minimizeButton = [window standardWindowButton:NSWindowMiniaturizeButton];
+    NSView *zoomButton = [window standardWindowButton:NSWindowZoomButton];
     for (NSView *buttonView in @[closeButton, minimizeButton, zoomButton]){
         CGRect buttonFrame = buttonView.frame;
         
