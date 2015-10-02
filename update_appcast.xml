@@ -72,7 +72,7 @@
                     <p>Credits for this release go entirely to @andersio!</p>
                 ]]></description>
             <pubDate>Fri, 2 Oct 2015 21:30:00 +0000</pubDate>
-            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/v1.4.1/ChitChat.zip"
+            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/1.4.1/ChitChat.zip"
                sparkle:version="1.4.1"
                type="application/octet-stream" />
         </item>
