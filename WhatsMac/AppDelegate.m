@@ -7,11 +7,14 @@
 @import WebKit;
 @import Sparkle;
 
+NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
+
 @interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
 @property (strong, nonatomic) NSView* titlebarView;
 @property (strong, nonatomic) NSStatusItem *statusItem;
+@property (weak) IBOutlet NSMenuItem *statusItemToggle;
 @property (weak, nonatomic) NSWindow *legal;
 @property (weak, nonatomic) NSWindow *faq;
 @property (strong, nonatomic) NSString *notificationCount;
@@ -74,7 +77,13 @@
     _titlebarView = [_window standardWindowButton:NSWindowCloseButton].superview;
     [self updateWindowTitlebar];
     
-    [self createStatusItem];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:WAMShouldHideStatusItem]];
+    if( ![defaults boolForKey:WAMShouldHideStatusItem] ) {
+      [self createStatusItem];
+    } else {
+      [self.statusItemToggle setTitle:@"Show Status Icon"];
+    }
 
     _webView = [[WAMWebView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)
                                   configuration:[self webViewConfig]];
@@ -133,6 +142,18 @@
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
     self.statusItem.action = @selector(showAppWindow:);
+}
+
+- (IBAction)toggleStatusItem:(id)sender {
+    if( self.statusItem != nil ) {
+      self.statusItem = nil;
+      [self.statusItemToggle setTitle:@"Show Status Icon"];
+      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:WAMShouldHideStatusItem];
+    } else {
+      [self createStatusItem];
+      [self.statusItemToggle setTitle:@"Hide Status Icon"];
+      [[NSUserDefaults standardUserDefaults] setBool:NO forKey:WAMShouldHideStatusItem];
+    }
 }
 
 - (void)showAppWindow:(id)sender {
