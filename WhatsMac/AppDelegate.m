@@ -102,47 +102,47 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
 }
 
 - (BOOL)shouldPropagateMouseDraggedEvent:(NSEvent*)theEvent {
-  if( ![theEvent.window isEqual:_window] ) {
-    return YES;
-  }
-  
-  if( !_isDragging ) {
-    _isDragging = YES;
-    _initialDragPosition = theEvent.locationInWindow;
-  }
-  
-  if( _initialDragPosition.y < (_window.frame.size.height - 59) ) {
-    return YES;
-  }
-  
-  NSPoint mouseLocation = [NSEvent mouseLocation];
-  NSRect newFrame = NSRectFromCGRect(_window.frame);
-  newFrame.origin.x = mouseLocation.x - _initialDragPosition.x;
-  newFrame.origin.y = mouseLocation.y - _initialDragPosition.y;
+    if( ![theEvent.window isEqual:_window] ) {
+      return YES;
+    }
+    
+    if( !_isDragging ) {
+      _isDragging = YES;
+      _initialDragPosition = theEvent.locationInWindow;
+    }
+    
+    if( _initialDragPosition.y < (_window.frame.size.height - 59) ) {
+      return YES;
+    }
+    
+    NSPoint mouseLocation = [NSEvent mouseLocation];
+    NSRect newFrame = NSRectFromCGRect(_window.frame);
+    newFrame.origin.x = mouseLocation.x - _initialDragPosition.x;
+    newFrame.origin.y = mouseLocation.y - _initialDragPosition.y;
 
-  [_window.animator setFrame:newFrame display:YES animate:NO];
-  
-  return NO;
+    [_window.animator setFrame:newFrame display:YES animate:NO];
+    
+    return NO;
 }
 
 - (BOOL)shouldPropagateMouseUpEvent:(NSEvent *)theEvent {
-  if( _isDragging ) {
-    _isDragging = NO;
-    return NO;
-  }
-  
-  if( theEvent.locationInWindow.y >= (_window.frame.size.height - 59) ) {
-    if( theEvent.clickCount == 2 ) {
-      if( _doubleClickShouldMinimize ) {
-        [_window miniaturize:self];
-      } else {
-        [_window zoom:self];
-      }
+    if( _isDragging ) {
+      _isDragging = NO;
       return NO;
     }
-  }
-  
-  return YES;
+    
+    if( theEvent.locationInWindow.y >= (_window.frame.size.height - 59) ) {
+      if( theEvent.clickCount == 2 ) {
+        if( _doubleClickShouldMinimize ) {
+          [_window miniaturize:self];
+        } else {
+          [_window zoom:self];
+        }
+        return NO;
+      }
+    }
+    
+    return YES;
 }
 
 - (void)doubleClickPreferenceDidChange:(NSNotification*)notification {
@@ -174,11 +174,11 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
 }
 
 - (void)windowWillEnterFullScreen:(NSNotification *)notification {
-  [self updateTitlebarOfWindow:_window forFullScreen:YES];
+    [self updateTitlebarOfWindow:_window forFullScreen:YES];
 }
 
 - (void)windowDidExitFullScreen:(NSNotification *)notification {
-  [self updateTitlebarOfWindow:_window forFullScreen:NO];
+    [self updateTitlebarOfWindow:_window forFullScreen:NO];
 }
 
 - (void)windowDidResize:(NSNotification *)notification {
@@ -345,7 +345,7 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
     CGRect windowFrame = window.frame;
   
     // Set size of titlebar container
-  NSView *titlebarContainerView = [window standardWindowButton:NSWindowCloseButton].superview.superview;
+    NSView *titlebarContainerView = [window standardWindowButton:NSWindowCloseButton].superview.superview;
     CGRect titlebarContainerFrame = titlebarContainerView.frame;
     titlebarContainerFrame.origin.y = windowFrame.size.height - kTitlebarHeight;
     titlebarContainerFrame.size.height = kTitlebarHeight;
