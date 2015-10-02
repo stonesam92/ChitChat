@@ -7,6 +7,9 @@
 @import WebKit;
 @import Sparkle;
 
+NSString *const _AppleActionOnDoubleClickKey = @"AppleActionOnDoubleClick";
+NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppearancePreferenceChanged";
+
 @interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
@@ -16,6 +19,7 @@
 @property (strong, nonatomic) NSString *notificationCount;
 @property (nonatomic) NSPoint initialDragPosition;
 @property (nonatomic) BOOL isDragging;
+@property (nonatomic) BOOL doubleClickShouldMinimize;
 @end
 
 @implementation AppDelegate
@@ -73,6 +77,9 @@
     [self updateTitlebarOfWindow:_window forFullScreen:NO];
     
     [self createStatusItem];
+  
+    [self doubleClickPreferenceDidChange:nil];
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(doubleClickPreferenceDidChange:) name:_AppleActionOnDoubleClickNotification object:nil];
 
     _webView = [[WAMWebView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)
                                   configuration:[self webViewConfig]];
@@ -124,7 +131,22 @@
     return NO;
   }
   
+  if( theEvent.locationInWindow.y >= (_window.frame.size.height - 59) ) {
+    if( theEvent.clickCount == 2 ) {
+      if( _doubleClickShouldMinimize ) {
+        [_window miniaturize:self];
+      } else {
+        [_window zoom:self];
+      }
+      return NO;
+    }
+  }
+  
   return YES;
+}
+
+- (void)doubleClickPreferenceDidChange:(NSNotification*)notification {
+    _doubleClickShouldMinimize = [[[NSUserDefaults standardUserDefaults] stringForKey: _AppleActionOnDoubleClickKey] isEqualToString:@"Minimize"] ? YES : NO;
 }
 
 - (void)createStatusItem {
