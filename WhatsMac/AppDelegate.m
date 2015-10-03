@@ -78,7 +78,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
   
     [self updateTitlebarOfWindow:_window fullScreen:NO];
     
-     [self doubleClickPreferenceDidChange:nil];
+    [self doubleClickPreferenceDidChange:nil];
     [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(doubleClickPreferenceDidChange:) name:_AppleActionOnDoubleClickNotification object:nil];
   
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
