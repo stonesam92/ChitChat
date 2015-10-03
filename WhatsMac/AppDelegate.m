@@ -158,9 +158,12 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 - (void)createStatusItem {
+    NSImage* image = [NSImage imageNamed:@"statusIconRead"];
+    [image setTemplate:YES];
+
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
-    [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
-    self.statusItem.action = @selector(showAppWindow:);
+    [self.statusItem.button setImage:image];
+    self.statusItem.button.action = @selector(showAppWindow:);
 }
 
 - (IBAction)toggleStatusItem:(id)sender {
@@ -244,10 +247,13 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
         NSInteger badgeCount = notificationCount.integerValue;
         
         if (badgeCount) {
-            [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconUnread"]];
-        }
-        else {
-            [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
+            NSImage* image = [NSImage imageNamed:@"statusIconUnread"];
+            [self.statusItem.button setImage:image];
+        } else {
+            NSImage* image = [NSImage imageNamed:@"statusIconRead"];
+            [image setTemplate:YES];
+
+            [self.statusItem.button setImage:image];
             [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
         }
     }
