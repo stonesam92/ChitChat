@@ -9,6 +9,7 @@
 
 NSString *const _AppleActionOnDoubleClickKey = @"AppleActionOnDoubleClick";
 NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppearancePreferenceChanged";
+NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 
 @interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
@@ -75,12 +76,18 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
     _window.frameAutosaveName = @"main";
     _window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
   
-    [self updateTitlebarOfWindow:_window forFullScreen:NO];
+    [self updateTitlebarOfWindow:_window fullScreen:NO];
     
-    [self createStatusItem];
-  
-    [self doubleClickPreferenceDidChange:nil];
+     [self doubleClickPreferenceDidChange:nil];
     [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(doubleClickPreferenceDidChange:) name:_AppleActionOnDoubleClickNotification object:nil];
+  
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:WAMShouldHideStatusItem]];
+    if( ![defaults boolForKey:WAMShouldHideStatusItem] ) {
+      [self createStatusItem];
+    } else {
+      [self.statusItemToggle setTitle:@"Show Status Icon"];
+    }
 
     _webView = [[WAMWebView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)
                                   configuration:[self webViewConfig]];
@@ -187,15 +194,15 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
 }
 
 - (void)windowWillEnterFullScreen:(NSNotification *)notification {
-    [self updateTitlebarOfWindow:_window forFullScreen:YES];
+    [self updateTitlebarOfWindow:_window fullScreen:YES];
 }
 
 - (void)windowDidExitFullScreen:(NSNotification *)notification {
-    [self updateTitlebarOfWindow:_window forFullScreen:NO];
+    [self updateTitlebarOfWindow:_window fullScreen:NO];
 }
 
 - (void)windowDidResize:(NSNotification *)notification {
-    [self updateTitlebarOfWindow:_window forFullScreen:NO];
+    [self updateTitlebarOfWindow:_window fullScreen:NO];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -352,7 +359,7 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
 }
 
 # pragma mark Utils
-- (void)updateTitlebarOfWindow:(NSWindow*)window forFullScreen:(BOOL)fullScreen {
+- (void)updateTitlebarOfWindow:(NSWindow*)window fullScreen:(BOOL)fullScreen {
     const CGFloat kTitlebarHeight = 59;
     const CGFloat kFullScreenButtonYOrigin = 3;
     CGRect windowFrame = window.frame;
