@@ -83,7 +83,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
   
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:WAMShouldHideStatusItem]];
-    if( ![defaults boolForKey:WAMShouldHideStatusItem] ) {
+    if (![defaults boolForKey:WAMShouldHideStatusItem]) {
       [self createStatusItem];
     } else {
       [self.statusItemToggle setTitle:@"Show Status Icon"];
@@ -110,16 +110,16 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 - (BOOL)shouldPropagateMouseDraggedEvent:(NSEvent*)theEvent {
-    if( ![theEvent.window isEqual:_window] ) {
+    if (![theEvent.window isEqual:_window]) {
       return YES;
     }
     
-    if( !_isDragging ) {
+    if (!_isDragging) {
       _isDragging = YES;
       _initialDragPosition = theEvent.locationInWindow;
     }
     
-    if( _initialDragPosition.y < (_window.frame.size.height - 59) ) {
+    if (_initialDragPosition.y < (_window.frame.size.height - 59)) {
       return YES;
     }
     
@@ -134,14 +134,14 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 - (BOOL)shouldPropagateMouseUpEvent:(NSEvent *)theEvent {
-    if( _isDragging ) {
+    if (_isDragging) {
       _isDragging = NO;
       return NO;
     }
     
-    if( theEvent.locationInWindow.y >= (_window.frame.size.height - 59) ) {
-      if( theEvent.clickCount == 2 ) {
-        if( _doubleClickShouldMinimize ) {
+    if (theEvent.locationInWindow.y >= (_window.frame.size.height - 59)) {
+      if (theEvent.clickCount == 2) {
+        if (_doubleClickShouldMinimize) {
           [_window miniaturize:self];
         } else {
           [_window zoom:self];
@@ -167,7 +167,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 - (IBAction)toggleStatusItem:(id)sender {
-    if( self.statusItem != nil ) {
+    if (self.statusItem != nil) {
       self.statusItem = nil;
       [self.statusItemToggle setTitle:@"Show Status Icon"];
       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:WAMShouldHideStatusItem];
