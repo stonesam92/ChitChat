@@ -14,6 +14,7 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
 @property (strong, nonatomic) NSStatusItem *statusItem;
+@property (weak) IBOutlet NSMenuItem *statusItemToggle;
 @property (weak, nonatomic) NSWindow *legal;
 @property (weak, nonatomic) NSWindow *faq;
 @property (strong, nonatomic) NSString *notificationCount;
@@ -153,6 +154,18 @@ NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppear
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
     [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
     self.statusItem.action = @selector(showAppWindow:);
+}
+
+- (IBAction)toggleStatusItem:(id)sender {
+    if( self.statusItem != nil ) {
+      self.statusItem = nil;
+      [self.statusItemToggle setTitle:@"Show Status Icon"];
+      [[NSUserDefaults standardUserDefaults] setBool:YES forKey:WAMShouldHideStatusItem];
+    } else {
+      [self createStatusItem];
+      [self.statusItemToggle setTitle:@"Hide Status Icon"];
+      [[NSUserDefaults standardUserDefaults] setBool:NO forKey:WAMShouldHideStatusItem];
+    }
 }
 
 - (void)showAppWindow:(id)sender {
