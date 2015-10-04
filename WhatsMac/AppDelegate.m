@@ -7,12 +7,13 @@
 @import WebKit;
 @import Sparkle;
 
+NSString *const _AppleActionOnDoubleClickKey = @"AppleActionOnDoubleClick";
+NSString *const _AppleActionOnDoubleClickNotification = @"AppleNoRedisplayAppearancePreferenceChanged";
 NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 
 @interface AppDelegate () <NSWindowDelegate, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, NSUserNotificationCenterDelegate>
 @property (strong, nonatomic) NSWindow *window;
 @property (strong, nonatomic) WKWebView *webView;
-@property (strong, nonatomic) NSView* titlebarView;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (weak) IBOutlet NSMenuItem *statusItemToggle;
 @property (weak, nonatomic) NSWindow *legal;
@@ -20,6 +21,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 @property (strong, nonatomic) NSString *notificationCount;
 @property (nonatomic) NSPoint initialDragPosition;
 @property (nonatomic) BOOL isDragging;
+@property (nonatomic) BOOL doubleClickShouldMinimize;
 @end
 
 @implementation AppDelegate
@@ -74,12 +76,14 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
     _window.frameAutosaveName = @"main";
     _window.collectionBehavior = NSWindowCollectionBehaviorFullScreenPrimary;
   
-    _titlebarView = [_window standardWindowButton:NSWindowCloseButton].superview;
-    [self updateWindowTitlebar];
+    [self updateTitlebarOfWindow:_window fullScreen:NO];
     
+    [self doubleClickPreferenceDidChange:nil];
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(doubleClickPreferenceDidChange:) name:_AppleActionOnDoubleClickNotification object:nil];
+  
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults registerDefaults:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:WAMShouldHideStatusItem]];
-    if( ![defaults boolForKey:WAMShouldHideStatusItem] ) {
+    if (![defaults boolForKey:WAMShouldHideStatusItem]) {
       [self createStatusItem];
     } else {
       [self.statusItemToggle setTitle:@"Show Status Icon"];
@@ -106,46 +110,64 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 - (BOOL)shouldPropagateMouseDraggedEvent:(NSEvent*)theEvent {
-  if( ![theEvent.window isEqual:_window] ) {
-    return YES;
-  }
-  
-  if( !_isDragging ) {
-    _isDragging = YES;
-    _initialDragPosition = theEvent.locationInWindow;
-  }
-  
-  if( _initialDragPosition.y < (_window.frame.size.height - 59) ) {
-    return YES;
-  }
-  
-  NSPoint mouseLocation = [NSEvent mouseLocation];
-  NSRect newFrame = NSRectFromCGRect(_window.frame);
-  newFrame.origin.x = mouseLocation.x - _initialDragPosition.x;
-  newFrame.origin.y = mouseLocation.y - _initialDragPosition.y;
+    if (![theEvent.window isEqual:_window]) {
+      return YES;
+    }
+    
+    if (!_isDragging) {
+      _isDragging = YES;
+      _initialDragPosition = theEvent.locationInWindow;
+    }
+    
+    if (_initialDragPosition.y < (_window.frame.size.height - 59)) {
+      return YES;
+    }
+    
+    NSPoint mouseLocation = [NSEvent mouseLocation];
+    NSRect newFrame = NSRectFromCGRect(_window.frame);
+    newFrame.origin.x = mouseLocation.x - _initialDragPosition.x;
+    newFrame.origin.y = mouseLocation.y - _initialDragPosition.y;
 
-  [_window.animator setFrame:newFrame display:YES animate:NO];
-  
-  return NO;
+    [_window.animator setFrame:newFrame display:YES animate:NO];
+    
+    return NO;
 }
 
 - (BOOL)shouldPropagateMouseUpEvent:(NSEvent *)theEvent {
-  if( _isDragging ) {
-    _isDragging = NO;
-    return NO;
-  }
-  
-  return YES;
+    if (_isDragging) {
+      _isDragging = NO;
+      return NO;
+    }
+    
+    if (theEvent.locationInWindow.y >= (_window.frame.size.height - 59)) {
+      if (theEvent.clickCount == 2) {
+        if (_doubleClickShouldMinimize) {
+          [_window miniaturize:self];
+        } else {
+          [_window zoom:self];
+        }
+        return NO;
+      }
+    }
+    
+    return YES;
+}
+
+- (void)doubleClickPreferenceDidChange:(NSNotification*)notification {
+    _doubleClickShouldMinimize = [[[NSUserDefaults standardUserDefaults] stringForKey: _AppleActionOnDoubleClickKey] isEqualToString:@"Minimize"] ? YES : NO;
 }
 
 - (void)createStatusItem {
+    NSImage* image = [NSImage imageNamed:@"statusIconRead"];
+    [image setTemplate:YES];
+
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
-    [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
-    self.statusItem.action = @selector(showAppWindow:);
+    [self.statusItem.button setImage:image];
+    self.statusItem.button.action = @selector(showAppWindow:);
 }
 
 - (IBAction)toggleStatusItem:(id)sender {
-    if( self.statusItem != nil ) {
+    if (self.statusItem != nil) {
       self.statusItem = nil;
       [self.statusItemToggle setTitle:@"Show Status Icon"];
       [[NSUserDefaults standardUserDefaults] setBool:YES forKey:WAMShouldHideStatusItem];
@@ -174,8 +196,16 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
     return YES;
 }
 
+- (void)windowWillEnterFullScreen:(NSNotification *)notification {
+    [self updateTitlebarOfWindow:_window fullScreen:YES];
+}
+
+- (void)windowDidExitFullScreen:(NSNotification *)notification {
+    [self updateTitlebarOfWindow:_window fullScreen:NO];
+}
+
 - (void)windowDidResize:(NSNotification *)notification {
-    [self updateWindowTitlebar];
+    [self updateTitlebarOfWindow:_window fullScreen:NO];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -217,10 +247,13 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
         NSInteger badgeCount = notificationCount.integerValue;
         
         if (badgeCount) {
-            [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconUnread"]];
-        }
-        else {
-            [self.statusItem.button setImage:[NSImage imageNamed:@"statusIconRead"]];
+            NSImage* image = [NSImage imageNamed:@"statusIconUnread"];
+            [self.statusItem.button setImage:image];
+        } else {
+            NSImage* image = [NSImage imageNamed:@"statusIconRead"];
+            [image setTemplate:YES];
+
+            [self.statusItem.button setImage:image];
             [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
         }
     }
@@ -332,14 +365,13 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 # pragma mark Utils
-- (void)updateWindowTitlebar {
+- (void)updateTitlebarOfWindow:(NSWindow*)window fullScreen:(BOOL)fullScreen {
     const CGFloat kTitlebarHeight = 59;
     const CGFloat kFullScreenButtonYOrigin = 3;
-    CGRect windowFrame = _window.frame;
-    BOOL fullScreen = (_window.styleMask & NSFullScreenWindowMask) == NSFullScreenWindowMask;
-    
+    CGRect windowFrame = window.frame;
+  
     // Set size of titlebar container
-    NSView *titlebarContainerView = _titlebarView.superview;
+    NSView *titlebarContainerView = [window standardWindowButton:NSWindowCloseButton].superview.superview;
     CGRect titlebarContainerFrame = titlebarContainerView.frame;
     titlebarContainerFrame.origin.y = windowFrame.size.height - kTitlebarHeight;
     titlebarContainerFrame.size.height = kTitlebarHeight;
@@ -347,9 +379,9 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
     
     // Set position of window buttons
     CGFloat buttonX = 12; // initial LHS margin, matching Safari 8.0 on OS X 10.10.
-    NSView *closeButton = [self.window standardWindowButton:NSWindowCloseButton];
-    NSView *minimizeButton = [self.window standardWindowButton:NSWindowMiniaturizeButton];
-    NSView *zoomButton = [self.window standardWindowButton:NSWindowZoomButton];
+    NSView *closeButton = [window standardWindowButton:NSWindowCloseButton];
+    NSView *minimizeButton = [window standardWindowButton:NSWindowMiniaturizeButton];
+    NSView *zoomButton = [window standardWindowButton:NSWindowZoomButton];
     for (NSView *buttonView in @[closeButton, minimizeButton, zoomButton]){
         CGRect buttonFrame = buttonView.frame;
         
