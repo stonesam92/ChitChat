@@ -67,7 +67,7 @@
                 <h4>NOTE: If you are still running a version of ChitChat released as WhatsMac (1.0) then this update cannot be applied automatically and must be downloaded manually from <a href="https://github.com/stonesam92/ChitChat/releases/tag/v1.3">release page</a>.</h4>
                     <h2>Changes</h2>
                     <ul>
-                        <li>The status bar notification icon is now removable by a toggle in the Menu Bar:wq</li>
+                        <li>The status bar notification icon is now removable by a toggle in the Menu Bar</li>
                     </ul>
                     <p>Credits for this release go entirely to @andersio!</p>
                 ]]></description>
