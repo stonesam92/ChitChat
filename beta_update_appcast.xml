@@ -72,8 +72,25 @@
                     <p>Credits for this release go entirely to @andersio!</p>
                 ]]></description>
             <pubDate>Fri, 2 Oct 2015 21:30:00 +0000</pubDate>
-            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/v1.4.1/ChitChat.zip"
+            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/1.4.1/ChitChat.zip"
                sparkle:version="1.4.1"
+               type="application/octet-stream" />
+        </item>
+        <item>
+            <title>Version 1.5.0</title>
+            <description><![CDATA[
+                    <h2>Changes</h2>
+                    <ul>
+                        <li>Fixed bug which prevented traffic light buttons from being shown after exiting full screen mode</li>
+                        <li>Fixed issue which prevented WhatsApp Web from loading in some cases on 10.11</li>
+                        <li>Improved the status bar icon's appearance in dark mode</li>
+                        <li>You can now double click on the window's title bar to maximise/shrink it.</li>
+                    </ul>
+                    <p>Once again, this update was contributed entirely by @andersio - thanks yet again!</p>
+                ]]></description>
+            <pubDate>Sun, 4 Oct 2015 22:20:00 +0000</pubDate>
+            <enclosure url="https://github.com/stonesam92/ChitChat/releases/download/v1.5/ChitChat.zip"
+               sparkle:version="1.5.0"
                type="application/octet-stream" />
         </item>
     </channel>
