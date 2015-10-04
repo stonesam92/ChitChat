@@ -84,7 +84,9 @@
                         <li>Fixed bug which prevented traffic light buttons from being shown after exiting full screen mode</li>
                         <li>Fixed issue which prevented WhatsApp Web from loading in some cases on 10.11</li>
                         <li>Improved the status bar icon's appearance in dark mode</li>
-                        <li>You can now double click on the window's title bar to maximise/shrink it.</li>
+                        <li>You can now double click on the window's title bar to maximise/shrink it</li>
+                        <li>The status bar notification icon is now removable by a toggle in the menu bar (added in 1.4.1)</li>
+
                     </ul>
                     <p>Once again, this update was contributed entirely by @andersio - thanks yet again!</p>
                 ]]></description>
