@@ -196,7 +196,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
     return YES;
 }
 
-- (void)windowWillEnterFullScreen:(NSNotification *)notification {
+- (void)windowDidEnterFullScreen:(NSNotification *)notification {
     [self updateTitlebarOfWindow:_window fullScreen:YES];
 }
 
@@ -366,7 +366,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 
 # pragma mark Utils
 - (void)updateTitlebarOfWindow:(NSWindow*)window fullScreen:(BOOL)fullScreen {
-    const CGFloat kTitlebarHeight = 59;
+        const CGFloat kTitlebarHeight = 59;
     const CGFloat kFullScreenButtonYOrigin = 3;
     CGRect windowFrame = window.frame;
   
