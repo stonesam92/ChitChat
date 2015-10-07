@@ -79,6 +79,7 @@
         <item>
             <title>Version 1.5.0</title>
             <description><![CDATA[
+            	    <h3>NOTE: If you are running 10.11 El Capitan, then this update cannot be applied automatically and must be downloaded manually from <a href="https://github.com/stonesam92/ChitChat/releases/tag/v1.5">the release page</a>.</h3>
                     <h2>Changes</h2>
                     <ul>
                         <li>Fixed bug which prevented traffic light buttons from being shown after exiting full screen mode</li>
