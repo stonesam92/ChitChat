@@ -344,7 +344,6 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
     notification.subtitle = messageBody[1];
     notification.identifier = messageBody[2];
     [[NSUserNotificationCenter defaultUserNotificationCenter] scheduleNotification:notification];
-
 }
 
 - (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
@@ -354,10 +353,7 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
     if (notification.activationType == NSUserNotificationActivationTypeReplied){
         NSString* userResponse = notification.response.string;
-        
-        NSLog(@"Risposta Quick Reply: %@", userResponse);
-        
-        //POSTING RESPONSE
+        //Sending reply to WAWeb
         [self.webView evaluateJavaScript:
          [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
                        completionHandler:nil];
