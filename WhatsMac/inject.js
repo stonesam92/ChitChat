@@ -114,9 +114,7 @@ function clickOnItemWithIndex (index, scrollToItem) {
 }
 
 function openChat (rawTag) {
-    var $ = jQuery;
-    var tag = rawTag.replace('.', '=1');
-    $('div.chat[data-reactid*="' + tag + '"]').first().click();
+var event = new MouseEvent('mousedown', { 'view': window, 'bubbles': true, 'cancelable': true }); document.querySelector('div.chat[data-reactid*="' + tag + '"]').dispatchEvent(event);
 }
 
 function setActiveConversationAtIndex (index) {
