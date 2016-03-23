@@ -338,6 +338,8 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
     }
     NSArray *messageBody = message.body;
     NSUserNotification *notification = [NSUserNotification new];
+    notification.hasReplyButton = true;
+    notification.responsePlaceholder = @"Reply...";
     notification.title = messageBody[0];
     notification.subtitle = messageBody[1];
     notification.identifier = messageBody[2];
@@ -349,10 +351,31 @@ NSString* const WAMShouldHideStatusItem = @"WAMShouldHideStatusItem";
 }
 
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification {
-    [self.webView evaluateJavaScript:
-     [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
-        completionHandler:nil];
-    [center removeDeliveredNotification:notification];
+    if (notification.activationType == NSUserNotificationActivationTypeReplied){
+        NSString* userResponse = notification.response.string;
+        //Sending reply to WAWeb
+        [self.webView evaluateJavaScript:
+         [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
+                       completionHandler:nil];
+        
+        [self.webView evaluateJavaScript:
+         [NSString stringWithFormat:@"dispatch(document.querySelector('div.input'), 'textInput', '%@')", userResponse]
+                       completionHandler:nil];
+        
+        [self.webView evaluateJavaScript:
+         [NSString stringWithFormat:@"triggerClick();"]
+                       completionHandler:nil];
+        
+        [center removeDeliveredNotification:notification];
+        
+    } else {
+        [self.webView evaluateJavaScript:
+         [NSString stringWithFormat:@"openChat(\"%@\")", notification.identifier]
+                       completionHandler:nil];
+        [center removeDeliveredNotification:notification];
+        [_window makeKeyAndOrderFront:self];
+    }
+
 }
 
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
